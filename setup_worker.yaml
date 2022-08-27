@@ -1,0 +1,32 @@
+---
+- name: join worker nodes into the cluster
+  hosts: worker
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: check the servers' os version
+      when: >
+        (ansible_distribution != 'Ubuntu')
+
+        or
+
+        (ansible_distribution_version != '20.04')
+      meta: end_play
+
+    - name: check variable is defined
+      when:
+        - admin is not defined
+      meta: end_play
+
+    - name: copy join worker script to worker
+      become_user: "{{ admin }}"
+      copy:
+        src: "/home/{{ admin }}/k8s_join_worker.sh"
+        dest: $HOME
+        mode: 0777
+      register: output
+
+    - name: execute join worker command
+      shell: "/home/{{ admin }}/k8s_join_worker.sh"
+      register: output
