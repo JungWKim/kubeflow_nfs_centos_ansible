@@ -2,7 +2,7 @@
 ### k8s version : 1.22.12
 ### CRI : CRI-O v1.22
 ### CNI : flannel
-### OS : CentOS 7.9
+### OS : CentOS 7.9 GNOME DESKTOP
 ### provisioner : nfs
 ### kubeflow version : 1.6
 ### kustomize : 3.2.0

@@ -1,5 +1,5 @@
 ---
-- name: install kubeflow v1.5
+- name: install kubeflow v1.6
   hosts: master
   become: yes
   gather_facts: yes
@@ -7,11 +7,11 @@
   tasks:
     - name: check the servers' os version
       when: >
-        (ansible_distribution != 'Ubuntu')
+        (ansible_distribution != 'CentOS')
 
         or
 
-        (ansible_distribution_version != '20.04')
+        (ansible_distribution_version != '7.9')
       meta: end_play
 
     - name: setup master node
@@ -25,7 +25,7 @@
       git:
         repo: 'https://github.com/kubeflow/manifests.git'
         dest: $HOME/manifests
-        version: v1.5-branch
+        version: v1.6-branch
         force: yes
       register: output
 
@@ -40,7 +40,7 @@
     - name: insert https redirection code in kf-istio-resources.yaml
       become_user: "{{ admin }}"
       shell: |
-        cat << EOF >> $HOME/manifests/common/istio-1-11/kubeflow-istio-resources/base/kf-istio-resources.yaml
+        cat << EOF >> $HOME/manifests/common/istio-1-14/kubeflow-istio-resources/base/kf-istio-resources.yaml
             tls:
               httpsRedirect: true
           - hosts:
@@ -56,20 +56,12 @@
         EOF
       register: output
 
-    - name: add line in deployment.yaml (1)
+    - name: change true to false in params.env file
       become_user: "{{ admin }}"
-      lineinfile:
-        line: '        - name: APP_SECURE_COOKIES'
-        insertafter: "env:"
-        path: $HOME/manifests/apps/jupyter/jupyter-web-app/upstream/base/deployment.yaml
-      register: output
-
-    - name: add line in deployment.yaml (2)
-      become_user: "{{ admin }}"
-      lineinfile:
-        line: '          value: "false"'
-        insertafter: "APP_SECURE_COOKIES"
-        path: $HOME/manifests/apps/jupyter/jupyter-web-app/upstream/base/deployment.yaml
+      replace:
+        regexp: 'true'
+        replace: 'false'
+        path: $HOME/manifests/apps/jupyter/jupyter-web-app/upstream/base/params.env
       register: output
 
     - name: download kustomize

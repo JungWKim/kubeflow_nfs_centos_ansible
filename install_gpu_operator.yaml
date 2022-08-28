@@ -7,11 +7,11 @@
   tasks:
     - name: check the servers' os version
       when: >
-        (ansible_distribution != 'Ubuntu')
+        (ansible_distribution != 'CentOS')
 
         or
 
-        (ansible_distribution_version != '20.04')
+        (ansible_distribution_version != '7.9')
       meta: end_play
 
     - name: setup master node
@@ -34,6 +34,7 @@
         helm install --wait --generate-name \
         -n gpu-operator --create-namespace \
         nvidia/gpu-operator
+        --set toolkit.version=1.7.1-centos7
       register: output
       
 # uninstall gpu operator : helm delete -n gpu-operator $(helm list -n gpu-operator | grep gpu-operator | awk '{print $1}')

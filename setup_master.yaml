@@ -7,11 +7,11 @@
   tasks:
     - name: check the servers' os version
       when: >
-        (ansible_distribution != 'Ubuntu')
+        (ansible_distribution != 'CentOS')
 
         or
 
-        (ansible_distribution_version != '20.04')
+        (ansible_distribution_version != '7.9')
       meta: end_play
 
     - name: setup master node
@@ -131,11 +131,11 @@
       register: output
 
     - name: install flannel
-      become: yes
-      become_user: root
       shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-      args:
-        chdir: "/home/{{ admin }}"
+      register: output
+
+    - name: export /usr/local/bin PATH in root's .bashrc
+      lineinfile: export PATH=/usr/local/bin:${PATH}
       register: output
 
     - name: download helm installation script
@@ -148,4 +148,8 @@
 
     - name: install helm
       shell: "/home/{{ admin }}/get_helm.sh"
+      register: output
+
+    - name: wait until flannel initialization finishes
+      shell: sleep 15
       register: output

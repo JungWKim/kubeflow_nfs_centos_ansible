@@ -1,0 +1,30 @@
+---
+- name: setup prerequisite jobs on every node
+  hosts: master
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: check the servers' os version
+      when: >
+        (ansible_distribution != 'CentOS')
+        or
+        (ansible_distribution_version != '7.9')
+      meta: end_play
+
+    - name: setup master node
+      when:
+        - admin is not defined
+      meta: end_play
+
+    - name: deploy k8s dashboard pod
+      shell: kubectl apply -f files/kubernetes-dashboard.yaml
+      register: output
+
+    - name: deploy service account for dashboard
+      shell: kubectl apply -f files/sa.yaml
+      register: output
+
+    - name: deploy cluster rolebinding for dashboard
+      shell: kubectl apply -f files/clusterrolebinding.yaml
+      register: output

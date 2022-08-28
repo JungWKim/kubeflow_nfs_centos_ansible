@@ -7,11 +7,11 @@
   tasks:
     - name: check the servers' os version
       when: >
-        (ansible_distribution != 'Ubuntu')
+        (ansible_distribution != 'CentOS')
 
         or
 
-        (ansible_distribution_version != '20.04')
+        (ansible_distribution_version != '7.9')
       meta: end_play
 
     - name: setup master node
