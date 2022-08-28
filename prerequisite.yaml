@@ -5,9 +5,6 @@
   gather_facts: yes
 
   tasks:
-    - debug: ip=ansible_default_ipv4.address
-    - debug: hostname=ansible_hostname
-
     - name: check the servers' os version
       when: >
         (ansible_distribution != 'CentOS')
@@ -70,7 +67,9 @@
       register: output
 
     - name: Set SELinux in permissive mode (effectively disabling it)
-      shell: sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+      replace:
+        regexp: 'SELINUX=enforcing'
+        replace: 'SELINUX=permissive'
       register: output
 
     - name: check if /etc/modules-load.d/k8s.conf exists
@@ -118,10 +117,12 @@
       command: sysctl --system
       register: output
 
+    - debug: var=ansible_default_ipv4.address
+
     - name: add its domain name in /etc/hosts
       lineinfile:
         path: /etc/hosts
-        line: {{ ip }}	{{ hostname }}
+        line: "{{ ansible_default_ipv4.address }}	{{ ansible_hostname }}"
       register: output
 
     - name: install crio 1.22 (1)
@@ -165,16 +166,16 @@
         path: /etc/yum.repos.d/kubernetes.repo 
         block: |
           [kubernetes]
-	  name=Kubernetes
-	  baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-	  enabled=1
-	  gpgcheck=1
-	  gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-	  exclude=kubelet kubeadm kubectl
+          name=Kubernetes
+          baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+          exclude=kubelet kubeadm kubectl
       register: output
 
     - name: install kubelet / kubeadm / kubectl
-      yuum:
+      yum:
         name:
           - kubelet=1.22.12
           - kubeadm=1.22.12
