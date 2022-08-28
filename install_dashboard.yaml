@@ -18,13 +18,16 @@
       meta: end_play
 
     - name: deploy k8s dashboard pod
-      shell: kubectl apply -f files/kubernetes-dashboard.yaml
+      become_user: "{{ admin }}"
+      shell: kubectl apply -f $HOME/kubeflow_centos_ansible/files/kubernetes-dashboard.yaml
       register: output
 
     - name: deploy service account for dashboard
-      shell: kubectl apply -f files/sa.yaml
+      become_user: "{{ admin }}"
+      shell: kubectl apply -f $HOME/kubeflow_centos_ansible/files/sa.yaml
       register: output
 
     - name: deploy cluster rolebinding for dashboard
-      shell: kubectl apply -f files/clusterrolebinding.yaml
+      become_user: "{{ admin }}"
+      shell: kubectl apply -f $HOME/kubeflow_centos_ansible/files/clusterrolebinding.yaml
       register: output

@@ -114,7 +114,7 @@
       register: output
 
     - name: reload system kernel params
-      command: sysctl --system
+      shell: sysctl --system
       register: output
 
     - debug: var=ansible_default_ipv4.address
@@ -171,34 +171,16 @@
           enabled=1
           gpgcheck=1
           gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-          exclude=kubelet kubeadm kubectl
       register: output
 
     - name: install kubelet / kubeadm / kubectl
       yum:
         name:
-          - kubelet=1.22.12
-          - kubeadm=1.22.12
-          - kubectl=1.22.12
+          - kubelet-1.22.12
+          - kubeadm-1.22.12
+          - kubectl-1.22.12
         state: present
-      register: output
-
-    - name: apt-mark hold kubeadm
-      dpkg_selections:
-        name: kubeadm
-        selection: hold
-      register: output
-
-    - name: apt-mark hold kubelet
-      dpkg_selections:
-        name: kubelet
-        selection: hold
-      register: output
-
-    - name: apt-mark hold kubectl
-      dpkg_selections:
-        name: kubectl
-        selection: hold
+        update_cache: true
       register: output
 
     - name: enable kubelet

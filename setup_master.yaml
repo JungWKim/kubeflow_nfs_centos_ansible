@@ -47,6 +47,7 @@
         path: $HOME/k8s_join_master.sh
         state: touch
         mode: 0777
+      when: not stat_result.stat.exists
       register: output
 
     - name: check if k8s join worker script exists
@@ -61,10 +62,18 @@
         path: $HOME/k8s_join_worker.sh
         state: touch
         mode: 0777
+      when: not stat_result.stat.exists
+      register: output
+
+    - name: modprobe br_netfilter
+      modprobe:
+        name: br_netfilter
+        state: present
       register: output
 
     - name: kubeadm init
-      shell: "kubeadm init --control-plane-endpoint {{ master_ip }}:6443 --upload-certs --pod-network-cidr \"10.244.0.0/16\" >> /home/{{ admin }}/k8s_log.sh"
+      shell: |
+        "kubeadm init --control-plane-endpoint {{ master_ip }}:6443 --upload-certs --pod-network-cidr \"10.244.0.0/16\" >> /home/{{ admin }}/k8s_log.sh"
       register: output
 
     - name: add join master command in its script (1)
@@ -135,7 +144,9 @@
       register: output
 
     - name: export /usr/local/bin PATH in root's .bashrc
-      lineinfile: export PATH=/usr/local/bin:${PATH}
+      lineinfile:
+        path: $HOME/.bashrc
+        line: export PATH=/usr/local/bin:${PATH}
       register: output
 
     - name: download helm installation script
@@ -147,7 +158,8 @@
       register: output
 
     - name: install helm
-      shell: "/home/{{ admin }}/get_helm.sh"
+      become_user: "{{ admin }}"
+      shell: $HOME/get_helm.sh
       register: output
 
     - name: wait until flannel initialization finishes
@@ -171,9 +183,9 @@
       register: coredns_pod2
 
     - name: delete existing coredns pod (1)
-      shell: "kubectl delete pod -n kube-system {{ coredns_pod1 }}"
+      shell: "kubectl delete pod -n kube-system {{ coredns_pod1.stdout }}"
       register: output
 
     - name: delete existing coredns pod (2)
-      shell: "kubectl delete pod -n kube-system {{ coredns_pod2 }}"
+      shell: "kubectl delete pod -n kube-system {{ coredns_pod2.stdout }}"
       register: output
