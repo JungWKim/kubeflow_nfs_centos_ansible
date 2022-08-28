@@ -70,6 +70,7 @@
       replace:
         regexp: 'SELINUX=enforcing'
         replace: 'SELINUX=permissive'
+        path: /etc/selinux/config
       register: output
 
     - name: check if /etc/modules-load.d/k8s.conf exists
@@ -181,12 +182,6 @@
           - kubectl-1.22.12
         state: present
         update_cache: true
-      register: output
-
-    - name: enable kubelet
-      systemd:
-        name: kubelet
-        enabled: yes 
       register: output
 
     - name: enable kubectl auto completion for root

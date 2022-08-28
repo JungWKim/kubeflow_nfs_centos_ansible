@@ -16,10 +16,8 @@
 ### 6. create_kubeflow.sh only uses nfs provisioner
 #
 # How to use this repository
-### 1. fix ips of every node
+### 1. fix ips and hostnames of every node
 ### 2. install sshpass on every node
-### 3. change hostnames on each node(optional)
-### 4. use same account and password through all nodes(this is not an option, you must do this!)
-### 5. make groups 'nodes', 'master', 'worker' and write ips in /etc/ansible/hosts
-### 6. input right values into 'admin', 'master_ip', 'nfs_ip', 'nfs_path' in create_cluster.sh & create_kubeflow.sh
-### 7. change values in /etc/ansible/ansible.cfg as you prefer
+### 3. use same account and password through all nodes(this is not an option, you must do this!)
+### 4. make groups 'nodes', 'master', 'worker' and write ips in /etc/ansible/hosts
+### 5. input right values into 'admin', 'master_ip', 'nfs_ip', 'nfs_path' in create_cluster.sh & create_kubeflow.sh
