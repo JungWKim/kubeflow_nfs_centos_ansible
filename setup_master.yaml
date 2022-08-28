@@ -151,5 +151,29 @@
       register: output
 
     - name: wait until flannel initialization finishes
-      shell: sleep 15
+      shell: sleep 60
+      register: output
+
+    - name: turn off cni0
+      shell: ip link set cni0 down
+      register: output
+
+    - name: delete cni0
+      shell: brctl delbr cni0
+      register: output
+
+    - name: save coredns pod as variable (1)
+      shell: echo $(kubectl get pod -A | grep coredns | awk '{print $2}') | awk '{print $1}'
+      register: coredns_pod1
+
+    - name: save coredns pod as variable (2)
+      shell: echo $(kubectl get pod -A | grep coredns | awk '{print $2}') | awk '{print $2}'
+      register: coredns_pod2
+
+    - name: delete existing coredns pod (1)
+      shell: "kubectl delete pod -n kube-system {{ coredns_pod1 }}"
+      register: output
+
+    - name: delete existing coredns pod (2)
+      shell: "kubectl delete pod -n kube-system {{ coredns_pod2 }}"
       register: output
