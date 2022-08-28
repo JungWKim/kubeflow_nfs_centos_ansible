@@ -22,16 +22,19 @@
       meta: end_play
 
     - name: add nfs helm repository
+      become_user: "{{ admin }}"
       kubernetes.core.helm_repository:
         name: nfs-subdir-external-provisioner
         repo_url: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
       register: output
 
     - name: update helm repo
+      become_user: "{{ admin }}"
       shell: helm repo update
       register: output
 
-    - name: install gpu operator
+    - name: install nfs provisioner pod
+      become_user: "{{ admin }}"
       shell: |
         helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
         --set nfs.server={{ nfs_ip }} \
