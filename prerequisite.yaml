@@ -118,7 +118,11 @@
       shell: sysctl --system
       register: output
 
-    - debug: var=ansible_default_ipv4.address
+    - name: modprobe br_netfilter
+      modprobe:
+        name: br_netfilter
+        state: present
+      register: output
 
     - name: add its domain name in /etc/hosts
       lineinfile:
@@ -182,6 +186,12 @@
           - kubectl-1.22.12
         state: present
         update_cache: true
+      register: output
+
+    - name: enable kubelet
+      systemd:
+        name: kubelet
+        state: enabled
       register: output
 
     - name: enable kubectl auto completion for root

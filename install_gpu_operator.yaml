@@ -36,7 +36,7 @@
       shell: |
         helm install --wait --generate-name \
         -n gpu-operator --create-namespace \
-        nvidia/gpu-operator
+        nvidia/gpu-operator \
         --set toolkit.version=1.7.1-centos7
       register: output
       
