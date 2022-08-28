@@ -16,7 +16,7 @@ sleep 30
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
-echo -e "                              *            install kubeflow v1.5.yaml         *                              "
+echo -e "                              *            install kubeflow v1.6.yaml         *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
 ansible-playbook install_kubeflow_v1.6.yaml -kK -e "admin=${admin} master_ip=${master_ip}"
