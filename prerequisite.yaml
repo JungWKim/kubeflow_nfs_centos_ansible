@@ -198,7 +198,7 @@
       systemd:
         name: kubelet
         state: started
-      register: outpu
+      register: output
 
     - name: enable kubectl auto completion for root
       blockinfile:
