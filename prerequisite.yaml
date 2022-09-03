@@ -191,7 +191,8 @@
     - name: enable kubelet
       systemd:
         name: kubelet
-        state: enabled
+        state: started
+        enabled: yes
       register: output
 
     - name: enable kubectl auto completion for root
