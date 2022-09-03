@@ -191,6 +191,10 @@
     - name: enable kubelet
       shell: systemctl enable --now kubelet
       register: output
+      
+    - name: start kubelet
+      shell: systemctl start kubelet
+      register: output
 
     - name: enable kubectl auto completion for root
       blockinfile:
