@@ -50,16 +50,16 @@
         state: present
       register: output
 
-    - name: disable firewalld
-      firewalld:
-        state: disabled
-      register: output
-
     - name: stop firewalld
       service:
         name: firewalld
         state: stopped
         enabled: false
+      register: output
+      
+    - name: disable firewalld
+      firewalld:
+        state: disabled
       register: output
 
     - name: turn off selinux
