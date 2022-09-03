@@ -151,8 +151,7 @@
       register: output
 
     - name: install helm
-      become_user: "{{ admin }}"
-      shell: $HOME/get_helm.sh
+      shell: "/home/{{ admin }}/get_helm.sh"
       register: output
 
     - name: wait until flannel initialization finishes
