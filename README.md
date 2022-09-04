@@ -1,6 +1,6 @@
 # Summary
 ### k8s version : 1.22.12
-### CRI : CRI-O v1.22
+### CRI : docker
 ### CNI : flannel
 ### OS : CentOS 7.9 GNOME DESKTOP
 ### provisioner : nfs
