@@ -157,30 +157,11 @@
       shell: systemctl enable docker
       register: output
 
-    - name: check if /etc/docker/daemon.json exists
-      stat:
-        path: /etc/docker/daemon.json
-      register: output
-
-    - name: create /etc/docker/daemon.json
-      file:
-        path: /etc/docker/daemon.json
-        state: touch
-      when: not stat_result.stat.exists
-      register: output
-
-    - name: input block in /etc/docker/daemon.json
-      blockinfile:
-        block: |
-          {
-            "exec-opts": ["native.cgroupdriver=systemd"],
-            "log-driver": "json-file",
-            "log-opts": {
-              "max-size": "100m"
-            },
-            "storage-driver": "overlay2"
-          }
-        path: /etc/docker/daemon.json
+    - name: copy daemon.json in /etc/docker
+      copy:
+        src: files/daemon.json
+        dest: /etc/docker
+        mode: 0777
       register: output
 
     - name: check if /etc/systemd/system/docker/service.d exists
