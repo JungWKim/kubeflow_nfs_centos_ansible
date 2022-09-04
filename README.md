@@ -18,6 +18,6 @@
 # How to use this repository
 ### 1. fix ips and hostnames of every node
 ### 2. install sshpass on every node
-### 3. use same account and password through all nodes(this is not an option, you must do this!)
+### 3. use same account and password through all nodes(optional but recommended)
 ### 4. make groups 'nodes', 'master', 'worker' and write ips in /etc/ansible/hosts
 ### 5. input right values into 'admin', 'master_ip', 'nfs_ip', 'nfs_path' in create_cluster.sh & create_kubeflow.sh
