@@ -32,11 +32,11 @@
 
 # reference : https://germaniumhq.com/2019/02/14/2019-02-14-Disabling-Swap-for-Kubernetes-in-an-Ansible-Playbook/
 
-    - name: upgrade all packages
-      yum:
-        name: '*'
-        state: latest
-      register: output
+#    - name: upgrade all packages
+#      yum:
+#        name: '*'
+#        state: latest
+#      register: output
 
     - name: install basic packages
       yum:
