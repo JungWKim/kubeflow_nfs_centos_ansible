@@ -218,7 +218,6 @@
           enabled=1
           gpgcheck=1
           gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-          exclude=kube*
       register: output
 
     - name: install kubelet / kubeadm / kubectl
@@ -228,7 +227,7 @@
           - kubeadm-1.22.12
           - kubectl-1.22.12
         state: present
-        update_cache: true
+        #update_cache: true
       register: output
    
     - name: enable kubelet
