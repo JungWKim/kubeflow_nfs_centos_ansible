@@ -227,7 +227,6 @@
           - kubeadm-1.22.12
           - kubectl-1.22.12
         state: present
-        lock_timeout: 30
         #update_cache: true
       register: output
    
