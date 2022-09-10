@@ -21,3 +21,4 @@
 ### 3. use same account and password through all nodes(optional but recommended)
 ### 4. make groups 'nodes', 'master', 'worker' and write ips in /etc/ansible/hosts
 ### 5. input right values into 'admin', 'master_ip', 'nfs_ip', 'nfs_path' in create_cluster.sh & create_kubeflow.sh
+### 6. set (1) host_key_checking = False and (2) become = True in /etc/ansible/ansible.cfg
