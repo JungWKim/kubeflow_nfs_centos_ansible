@@ -1,35 +1,35 @@
 #!/bin/bash
 
-admin=
-master_ip=
+ADMIN=
+MASTER_IP=
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *           execute prerequisite.yaml           *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
-ansible-playbook prerequisite.yaml -kK -e "admin=${admin}"
+ansible-playbook prerequisite.yaml -kK -e "admin=${ADMIN}"
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *           execute setup_master.yaml           *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
-ansible-playbook setup_master.yaml -kK -e "admin=${admin} master_ip=${master_ip}"
+ansible-playbook setup_master.yaml -kK -e "admin=${ADMIN} master_ip=${MASTER_IP}"
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *            execute join_worker.yaml           *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
-ansible-playbook setup_worker.yaml -kK -e "admin=${admin}"
+ansible-playbook setup_worker.yaml -kK -e "admin=${ADMIN}"
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *        execute install_dashboard.yaml         *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
-ansible-playbook install_dashboard.yaml -kK -e "admin=${admin}"
+ansible-playbook install_dashboard.yaml -kK -e "admin=${ADMIN}"
 
 echo -e "                              *************************************************                              "
 echo -e "                              *                                               *                              "
@@ -43,4 +43,4 @@ echo -e "                              *                                        
 echo -e "                              *           execute gpu_operator.yaml           *                              "
 echo -e "                              *                                               *                              "
 echo -e "                              *************************************************                              \n\n"
-ansible-playbook install_gpu_operator.yaml -kK -e "admin=${admin}"
+ansible-playbook install_gpu_operator.yaml -kK -e "admin=${ADMIN}"

@@ -47,7 +47,6 @@
         name:
           - net-tools
           - nfs-utils
-          - tmux
           - createrepo
           - wget
           - pciutils
