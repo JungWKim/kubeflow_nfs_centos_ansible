@@ -152,13 +152,15 @@
           - docker-compose-plugin
       register: output
 
-    - name: start docker
-      shell: systemctl start docker
-      register: output
+    - name: start docker daemon
+      systemd:
+        name: docker
+        state: started
 
-    - name: enable docker
-      shell: systemctl enable docker
-      register: output
+    - name: enable docker daemon
+      systemd:
+        name: docker
+        enabled: yes
 
     - name: copy daemon.json in /etc/docker
       copy:
