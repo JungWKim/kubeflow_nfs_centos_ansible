@@ -10,6 +10,21 @@ func_prerequisite() {
 		echo -e " Please write value in USER."
 		exit 1 ; fi
 
+	# /etc/os-release file existence check
+	if [ ! -e "/etc/os-release" ] ; then
+		logger -s "[Error] /etc/os-release doesn't exist. OS is unrecognizable."
+		exit 1
+	else
+		# check OS distribution
+		local OS_DIST=$(. /etc/os-release;echo $ID$VERSION_ID)
+
+		if [ "${OS_DIST}" != "centos7" ] ; then
+			logger -s "[Error] OS distribution doesn't match centos7"
+			exit 1
+		fi
+		logger -s "[INFO] OS distribution matches centos7"
+	fi
+
 	# define HOME directory
 	if [ $USER = root ] ; then
 		USER_HOME=/root
@@ -23,7 +38,7 @@ func_prerequisite() {
 	
 	# check htpasswd is installed
 	if [ ! -e /usr/bin/htpasswd ] ; then
-		echo -e "htpasswd doesn't exist. Enter 'sudo apt install -y apache2-utils'"
+		echo -e "htpasswd doesn't exist. Enter 'sudo yum install -y httpd-tools'"
 		exit 1 ; fi
 
 	# check $HOME/profile.yaml exists
